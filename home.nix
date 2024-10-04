@@ -41,9 +41,12 @@ let
 in rec {
   imports = let
     paths = [ ./packages.nix ./desktop-entries.nix ];
-    modules = [ inputs.ags.homeManagerModules.default ];
-  in modules ++ map (configPath:
-    import configPath { inherit pkgs cursor icons font theme; })
+    modules = [
+      inputs.ags.homeManagerModules.default
+      inputs.polykeyCli.homeModules.default
+    ];
+  in modules ++ map
+  (configPath: import configPath { inherit pkgs cursor icons font theme; })
   paths;
 
   home = {

@@ -1,4 +1,4 @@
-{ cursor, ... }:
+{ pkgs, cursor, ... }:
 
 let
   hyprsettings = {
@@ -8,11 +8,23 @@ let
     };
     rounding = "12";
   };
+
+  hyprlandPackage = pkgs.hyprland.overrideAttrs(self: {
+    version = "0.41.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "hyprwm";
+      repo = "hyprland";
+      fetchSubmodules = true;
+      rev = "refs/tags/v0.41.0";
+      hash = "sha256-iX/l3UT8iXu8psu2UirFX11Yg2zYwpgzoXB32oM3N3U=";
+    };
+  });
 in {
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     xwayland.enable = true;
+    package = hyprlandPackage;
 
     settings = {
       exec-once =
@@ -39,7 +51,7 @@ in {
 
         # Brian's workstation
         "desc:Dell Inc. DELL U2417H Y5V6Y81F836L,preferred,0x0,1"
-        "desc:Dell Inc. DELL U2417H Y5V6Y85EA32L,preferred,1920x-720,1,transform,1"
+        "desc:Dell Inc. DELL U2417H Y5V6Y85EA32L,preferred,1920x-540,1,transform,1"
       ];
 
       windowrulev2 = [

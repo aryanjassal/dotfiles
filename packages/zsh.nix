@@ -20,7 +20,7 @@
     initExtra = ''
       setopt NO_BEEP
       EDITOR=nvim
-      PATH=$PATH:~/.cargo/bin:~/.bin
+      PATH=$PATH:~/.cargo/bin:~/.bin:~/.npm-globals/node_modules/.bin
     '';
 
     shellAliases = {
@@ -32,6 +32,7 @@
       mc = "make clean";
       ndev = "nix develop --command zsh";
       rebuild = "home-manager switch --flake ~/.config/home-manager";
+      record = "ZDOTDIR=~/.zsh-rec zsh";
     };
   };
 }

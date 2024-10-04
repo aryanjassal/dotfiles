@@ -153,6 +153,10 @@ window.notification-popups box.notifications {
   border-radius: 0 5px 5px 0;
 }
 
+.bar .workspaces button.focused {
+  background-color: #ff9e64;
+}
+
 .bar .media {
   margin: 0 1rem;
   font-size: 0.85rem;

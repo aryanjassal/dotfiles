@@ -25,6 +25,7 @@
     git-lfs
     sass
     gcc
+    vscode
 
     # CLI Tools
     peaclock
@@ -50,7 +51,7 @@
     # Hyprland
     swaylock-effects # TODO: switch to hyprlock
     rofi-wayland
-    hyprland
+    # hyprland
     hyprlock
     hypridle
     kitty
