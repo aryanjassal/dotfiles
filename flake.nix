@@ -6,10 +6,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ags = {
-      url = "github:aylur/ags";
+      url = "github:aylur/ags/344ea72cd3b8d4911f362fec34bce7d8fb37028c";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    polykeyCli.url = "github:matrixai/polykey-cli";
+    polykey-cli.url = "github:matrixai/polykey-cli";
+    chroma.url = "github:aryanjassal/chroma";
   };
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
@@ -25,4 +26,3 @@
       };
     };
 }
-

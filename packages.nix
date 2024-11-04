@@ -1,4 +1,4 @@
-{ pkgs, cursor, icons, font, theme }:
+{ inputs, system, pkgs, cursor, icons, font, theme }:
 
 {
   # Automatically import all .nix files from ./packages directory
@@ -14,20 +14,28 @@
     python3
     neovim
     neovide
-    nodePackages.prettier
-    lua-language-server
-    emmet-language-server
-    vscode-langservers-extracted
-    nixfmt
-    emacsPackages.deno-fmt
-    stylua
-    nil
     git-lfs
     sass
     gcc
     vscode
+    libclang
+    deno
+    bun
+
+    # Nvim stuff
+    stylua
+    nixfmt-classic
+    emmet-language-server
+    typescript-language-server
+    vscode-langservers-extracted
+    nodePackages.prettier
+    lua-language-server
+    emacsPackages.deno-fmt
+    nil
+    biome
 
     # CLI Tools
+    wget
     peaclock
     pfetch
     nodejs
@@ -36,6 +44,10 @@
     yazi
     asciinema
     asciinema-agg
+    termsvg
+    imagemagick
+    scrcpy
+    inputs.chroma.packages.${system}.default
 
     # Apps
     teams-for-linux
@@ -43,15 +55,16 @@
     pavucontrol
     obs-studio
     spotify
+    brave
     vesktop
     gthumb
-    brave
     mpv
+    foot
+    jetbrains.webstorm
 
     # Hyprland
     swaylock-effects # TODO: switch to hyprlock
     rofi-wayland
-    # hyprland
     hyprlock
     hypridle
     kitty

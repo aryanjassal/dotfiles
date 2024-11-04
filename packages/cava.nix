@@ -4,9 +4,10 @@
   programs.cava = {
     enable = true;
     settings = {
-      smoothing.noise_reduction = 33;
       output.channels = "mono";
-      color.foreground = "red";
+      color.foreground = "magenta";
+      smoothing.monstercat = 1;
+      smoothing.noise_reduction = 33;
     };
   };
 }

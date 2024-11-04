@@ -25,12 +25,13 @@ window.notification-popups box.notifications {
   border-radius: 11px;
   padding: 1em;
   margin: 0.5em;
-  border: 1px solid #7aa2f7;
-  background-color: #1f2335;
+  border: 1px solid @accent_color;
+  background-color: @window_bg_color;
+  color: @window_fg_color
 }
 
 .notification.critical {
-  border: 1px solid #ff9e64;
+  border: 1px solid @red_1;
 }
 
 .title {
@@ -39,7 +40,7 @@ window.notification-popups box.notifications {
 }
 
 .body {
-  color: grey;
+  color: @window_fg_color;
 }
 
 .actions .action-button {
@@ -60,7 +61,7 @@ window.notification-popups box.notifications {
 .player {
   padding: 10px;
   min-width: 450px;
-  background-color: #1f1f26;
+  background-color: @window_bg_color;
   border-radius: 5px;
 }
 
@@ -92,7 +93,7 @@ window.notification-popups box.notifications {
 }
 
 .player scale.position highlight {
-  background-color: white;
+  background-color: @window_fg_color;
 }
 
 .player scale.position slider {
@@ -112,7 +113,7 @@ window.notification-popups box.notifications {
 /* bar */
 
 .bar {
-  background-color: @theme_bg_color;
+  background-color: @window_bg_color;
 }
 
 .bar, .bar * {
@@ -121,7 +122,7 @@ window.notification-popups box.notifications {
 }
 
 .bar button {
-  background-color: @accent_bg_color;
+  background-color: @accent_color;
   color: @accent_fg_color;
 }
 
@@ -130,7 +131,7 @@ window.notification-popups box.notifications {
 }
 
 .bar .clock {
-  background-color: @accent_bg_color;
+  background-color: @accent_color;
   color: @accent_fg_color;
   padding: 0.5rem;
   border-radius: 5px;
@@ -144,17 +145,19 @@ window.notification-popups box.notifications {
 }
 
 .bar .workspaces button:first-child {
-  background-color: @accent_bg_color;
-  border-radius: 5px 0 0 5px;
+  background-color: @accent_color;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .bar .workspaces button:last-child {
-  background-color: @accent_bg_color;
-  border-radius: 0 5px 5px 0;
+  background-color: @accent_color;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .bar .workspaces button.focused {
-  background-color: #ff9e64;
+  background-color: @red_1;
 }
 
 .bar .media {

@@ -3,7 +3,7 @@
 {
   programs.ags = {
     enable = true;
-    configDir = theme.configDir;
+    configDir = "${theme.configDir}/ags";
     extraPackages = with pkgs; [ gtksourceview webkitgtk accountsservice ];
   };
 }

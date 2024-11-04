@@ -1,25 +1,21 @@
-import NotificationPopups from "./NotificationPopup.js";
-import Bar from "./Bar.js"
-// import Media from "./Media.js"
+const entry = App.configDir + "/main.ts";
+const outdir = "/tmp/ags/js";
 
-// const mediaWindow = Widget.Window({
-//   name: "mpris",
-//   anchor: ["top", "right"],
-//   child: Media(),
-// })
-
-Utils.timeout(100, () =>
-  Utils.notify({
-    appName: "System",
-    summary: "AGS running",
-    iconName: "info-symbolic",
-    body: "AGS is running in the background as a notification daemon.",
-  }),
-);
-
-App.config({
-  style: App.configDir + "/style.css",
-  windows: [NotificationPopups(), Bar()],
-  notificationPopupTimeout: 10000,
-  notificationForceTimeout: 10000,
-});
+try {
+  // @ts-ignore
+  await Utils.execAsync([
+    "bun",
+    "build",
+    entry,
+    "--outdir",
+    outdir,
+    "--external",
+    "resource://*",
+    "--external",
+    "gi://*",
+  ]);
+  // @ts-ignore
+  await import(`file://${outdir}/main.js`);
+} catch (error) {
+  console.error(error);
+}

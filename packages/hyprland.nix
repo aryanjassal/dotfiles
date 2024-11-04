@@ -56,8 +56,14 @@ in {
 
       windowrulev2 = [
         "float, title:^(btop)$"
+        "float, class:^(qemu|QEMU)$"
+        "float, class:^(xdg-desktop-portal-gtk)$"
         "center, title:^(btop)$"
         "size 70% 70%, title:^(btop)$"
+      ];
+
+      layerrule = [
+        "blur, rofi"
       ];
 
       input = {
@@ -90,14 +96,19 @@ in {
 
       animations = {
         enabled = true;
-        bezier = "ease, 0.2, 0.9, 0.1, 1.05";
+        bezier = [
+          "ws, 0.2, 0.9, 0.1, 1.05"
+          "ease, 0.25, 0.1, 0.25, 1"
+        ];
         animation = [
-          "windows, 1, 3, ease"
+          "windows, 1, 3, ws"
           "windowsOut, 1, 2, default, popin 80%"
           "border, 1, 10, default"
           "borderangle, 1, 8, default"
           "fade, 1, 1, default"
-          "workspaces, 1, 6, ease"
+          "workspaces, 1, 6, ws"
+          "layersIn, 1, 2, ease, slide up"
+          "layersOut, 1, 3, ease, slide down"
         ];
       };
 
@@ -131,6 +142,7 @@ in {
         "$mod, Q, killactive,"
         "$mod + SHIFT, F, toggleFloating,"
         "$mod, P, pseudo,"
+        "$mod, S, pin,"
         "$mod, R, togglesplit,"
         "$mod, F, fullscreen, 0"
         "$alt, F, fullscreen, 1"

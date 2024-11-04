@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, system, inputs, ... }:
 
 let
   theme = { configDir = ./config; };
@@ -43,32 +43,34 @@ in rec {
     paths = [ ./packages.nix ./desktop-entries.nix ];
     modules = [
       inputs.ags.homeManagerModules.default
-      inputs.polykeyCli.homeModules.default
+      inputs.polykey-cli.homeModules.default
     ];
   in modules ++ map
-  (configPath: import configPath { inherit pkgs cursor icons font theme; })
+  (configPath: import configPath { inherit inputs system pkgs cursor icons font theme; })
   paths;
 
   home = {
     # Home configuration
     username = "aryanj";
     homeDirectory = "/home/aryanj";
-    stateVersion = "24.05";
+    stateVersion = "24.11";
 
     # Make sure Wayland is being used by default
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      QT_XCB_GL_INTEGRATION = "none"; # kde-connect
       XCURSOR_THEME = cursor.name;
       XCURSOR_SIZE = cursor.size;
     };
 
     # Cursor theming
     pointerCursor = cursor // { gtk.enable = true; };
+
   };
 
+  xdg.systemDirs.data = [ "${home.homeDirectory}/.local/share" ];
+
   # GTK stuff.
-  # For theming GTK apps, look into Chroma or Gradience
+  # For theming GTK apps, look into Chroma
   gtk = {
     enable = true;
     cursorTheme = cursor;
@@ -82,11 +84,6 @@ in rec {
     ssh-agent.enable = true;
     kdeconnect.enable = true;
   };
-
-  # qt = {
-  #   enable = true;
-  #   platformTheme.name = "kde";
-  # };
 
   # Automatically update fonts if a font package is installed
   fonts.fontconfig.enable = true;
