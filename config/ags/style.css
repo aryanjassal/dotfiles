@@ -1,166 +1,123 @@
+* {
+  font-family: 'Ubuntu Nerd Font', sans-serif; }
+
 window.notification-popups box.notifications {
-  padding: 0.5em;
-}
+  padding: 0.5em; }
 
 .icon {
   min-width: 48px;
-  min-height: 48px;
-}
-
-.icon image {
-  font-size: 48px;
-  /* to center the icon */
-  margin-right: 10px;
-}
-
-.icon box {
-  min-width: 48px;
-  min-height: 48px;
-  border-radius: 4px;
-  margin-right: 12px;
-}
+  min-height: 48px; }
+  .icon image {
+    font-size: 48px;
+    margin-right: 10px; }
+  .icon box {
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 4px;
+    margin-right: 12px; }
 
 .notification {
   min-width: 350px;
   border-radius: 11px;
   padding: 1em;
   margin: 0.5em;
-  border: 1px solid @accent_color;
-  background-color: @window_bg_color;
-  color: @window_fg_color
-}
+  border: 1px solid #7aa2f7;
+  background-color: #1a1b26;
+  color: #a9b1d6; }
 
 .notification.critical {
-  border: 1px solid @red_1;
-}
+  border: 1px solid #f7768e; }
 
 .title {
   font-size: 1.2em;
-  margin-bottom: 8px;
-}
+  margin-bottom: 8px; }
 
 .body {
-  color: @window_fg_color;
-}
+  color: #a9b1d6; }
 
 .actions .action-button {
   margin: 0 0.4em;
-  margin-top: 0.8em;
-}
-
+  margin-top: 0.8em; }
 .actions .action-button:first-child {
-  margin-left: 0;
-}
-
+  margin-left: 0; }
 .actions .action-button:last-child {
-  margin-right: 0;
-}
+  margin-right: 0; }
 
 /* media */
+.media-contents {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #1a1b26; }
 
 .player {
   padding: 10px;
-  min-width: 450px;
-  background-color: @window_bg_color;
+  min-width: 500px;
+  background-color: #1a1b26;
   border-radius: 5px;
-}
+  font-size: 1.1em; }
+  .player * {
+    font-family: 'Gabarito', sans-serif; }
+  .player .img {
+    min-width: 125px;
+    min-height: 125px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 13px;
+    margin-right: 1.5em; }
+  .player .title {
+    font-size: 1.2em; }
+  .player .artist {
+    color: gray; }
+  .player .media-button {
+    padding: 0;
+    min-width: 2.5em;
+    min-height: 2.5em;
+    border-radius: 50%; }
+    .player .media-button label {
+      font-size: 1.1em; }
+  .player .progressbar {
+    font-size: 3px;
+    min-width: 0.4em;
+    min-height: 0.4em;
+    color: #7aa2f7; }
 
-.player .img {
-  min-width: 100px;
-  min-height: 100px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 13px;
-  margin-right: 1em;
-}
-
-.player .title {
-  font-size: 1.2em;
-}
-
-.player .artist {
-  font-size: 1.1em;
-  color: gray;
-}
-
-.player scale.position {
-  padding: 0;
-  margin-bottom: 0.3em;
-}
-
-.player scale.position trough {
-  min-height: 8px;
-}
-
-.player scale.position highlight {
-  background-color: @window_fg_color;
-}
-
-.player scale.position slider {
-  all: unset;
-}
-
-.player button{
-  min-height: 1em;
-  min-width: 1em;
-  padding: 0.3em;
-}
-
-.player button.play-pause {
-  margin: 0 0.3em;
-}
-
-/* bar */
+.bar,
+.bar * {
+  font-size: 0.75rem;
+  min-height: 0; }
 
 .bar {
-  background-color: @window_bg_color;
-}
+  background-color: #1a1b26; }
+  .bar button {
+    background-color: #7aa2f7;
+    color: #ffffff; }
+  .bar button:hover {
+    opacity: 0.6; }
+  .bar .clock {
+    background-color: #7aa2f7;
+    color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.85rem; }
+  .bar .workspaces button {
+    border-radius: 0;
+    padding: 0 0.5rem; }
+  .bar .workspaces button:first-child {
+    background-color: #7aa2f7;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; }
+  .bar .workspaces button:last-child {
+    background-color: #7aa2f7;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  .bar .workspaces button.focused {
+    background-color: #f7768e; }
+  .bar .media {
+    margin: 0 1rem;
+    font-size: 0.85rem; }
 
-.bar, .bar * {
-  font-size: 0.75rem;
-  min-height: 0;
-}
+.material-icons {
+  font-family: 'Material Symbols Rounded', 'MaterialSymbolsRounded', 'Material Symbols Outlined', 'Material Symbols Sharp'; }
 
-.bar button {
-  background-color: @accent_color;
-  color: @accent_fg_color;
-}
-
-.bar button:hover {
-  opacity: 0.6;
-}
-
-.bar .clock {
-  background-color: @accent_color;
-  color: @accent_fg_color;
-  padding: 0.5rem;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-
-.bar .workspaces button {
-  border-radius: 0;
-  padding: 0 0.5rem;
-}
-
-.bar .workspaces button:first-child {
-  background-color: @accent_color;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-.bar .workspaces button:last-child {
-  background-color: @accent_color;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.bar .workspaces button.focused {
-  background-color: @red_1;
-}
-
-.bar .media {
-  margin: 0 1rem;
-  font-size: 0.85rem;
-}
+/*# sourceMappingURL=style.css.map */

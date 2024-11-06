@@ -21,6 +21,7 @@
     libclang
     deno
     bun
+    nodemon
 
     # Nvim stuff
     stylua
@@ -50,12 +51,14 @@
     inputs.chroma.packages.${system}.default
 
     # Apps
+    bitwarden
     teams-for-linux
     libreoffice
     pavucontrol
     obs-studio
     spotify
     brave
+    firefox
     vesktop
     gthumb
     mpv
@@ -97,5 +100,7 @@
 
     # Fonts
     nerdfonts
+    material-symbols
+    google-fonts
   ];
 }
