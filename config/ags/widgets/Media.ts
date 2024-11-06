@@ -3,6 +3,7 @@ import type { MprisPlayer } from 'types/service/mpris';
 const mpris = await Service.import('mpris');
 
 let activePlayer: MprisPlayer = getActivePlayer(mpris.players);
+let trackedBusNames: string[] = [];
 
 function getActivePlayer(players: MprisPlayer[]) {
   if (players.length === 1) return players[0];
@@ -121,6 +122,7 @@ function Player(player: MprisPlayer) {
   });
 
   const playProgress = Widget.Overlay({
+    class_name: 'media-progress',
     child: playPause,
     overlays: [progressbar],
     pass_through: true,
@@ -152,7 +154,7 @@ function Player(player: MprisPlayer) {
 
   const totalLength = Widget.Box(
     {
-      class_name: 'position',
+      class_name: 'media-position',
       spacing: 6,
       hpack: 'end',
       setup: (self) =>
@@ -213,12 +215,21 @@ const mediaPopup = Widget.Window({
   class_name: 'media-popup',
   visible: false,
   anchor: ['top'],
+  margins: [6, 0],
   child: Widget.Box({
     class_name: 'media-contents',
     vertical: true,
-    spacing: 8,
+    spacing: 4,
     setup: (self) => {
       function update(_: any) {
+        // Check if we even need to update the list
+        const mprisBusNames = filterPlayers(mpris.players).map(
+          (v) => v.bus_name,
+        );
+        if (JSON.stringify(mprisBusNames) == JSON.stringify(trackedBusNames))
+          return;
+        // If we need to update the tracked buses
+        trackedBusNames = filterPlayers(mpris.players).map((v) => v.bus_name);
         // Delete old children
         self.get_children().forEach((ch) => ch.destroy());
         // Get a list of new children

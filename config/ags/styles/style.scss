@@ -63,12 +63,12 @@ window.notification-popups box.notifications {
   }
 }
 
-/* media */
+// Media stuff
 
 .media-contents {
-  padding: 10px;
+  padding: 4px;
   border-radius: 8px;
-  background-color: $background;
+  background-color: $background_unfocus;
 }
 
 .player {
@@ -98,6 +98,22 @@ window.notification-popups box.notifications {
 
   .artist {
     color: gray;
+  }
+
+  button:hover,
+  button:focus {
+    background-color: $accent_bg;
+    color: $accent_fg;
+  }
+
+  button,
+  .media-position {
+    background-color: $background_unfocus;
+  }
+
+  .media-position {
+    border-radius: 1em;
+    padding: 0 1em;
   }
 
   .media-button {
