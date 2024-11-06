@@ -1,0 +1,159 @@
+window.notification-popups box.notifications {
+  padding: 0.5em;
+}
+
+.icon {
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.icon image {
+  font-size: 48px;
+  /* to center the icon */
+  margin-right: 10px;
+}
+
+.icon box {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+
+.notification {
+  min-width: 350px;
+  border-radius: 11px;
+  padding: 1em;
+  margin: 0.5em;
+  border: 1px solid #7aa2f7;
+  background-color: #1f2335;
+}
+
+.notification.critical {
+  border: 1px solid #ff9e64;
+}
+
+.title {
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+
+.body {
+  color: grey;
+}
+
+.actions .action-button {
+  margin: 0 0.4em;
+  margin-top: 0.8em;
+}
+
+.actions .action-button:first-child {
+  margin-left: 0;
+}
+
+.actions .action-button:last-child {
+  margin-right: 0;
+}
+
+/* media */
+
+.player {
+  padding: 10px;
+  min-width: 450px;
+  background-color: #1f1f26;
+  border-radius: 5px;
+}
+
+.player .img {
+  min-width: 100px;
+  min-height: 100px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 13px;
+  margin-right: 1em;
+}
+
+.player .title {
+  font-size: 1.2em;
+}
+
+.player .artist {
+  font-size: 1.1em;
+  color: gray;
+}
+
+.player scale.position {
+  padding: 0;
+  margin-bottom: 0.3em;
+}
+
+.player scale.position trough {
+  min-height: 8px;
+}
+
+.player scale.position highlight {
+  background-color: white;
+}
+
+.player scale.position slider {
+  all: unset;
+}
+
+.player button{
+  min-height: 1em;
+  min-width: 1em;
+  padding: 0.3em;
+}
+
+.player button.play-pause {
+  margin: 0 0.3em;
+}
+
+/* bar */
+
+.bar {
+  background-color: @theme_bg_color;
+}
+
+.bar, .bar * {
+  font-size: 0.75rem;
+  min-height: 0;
+}
+
+.bar button {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+}
+
+.bar button:hover {
+  opacity: 0.6;
+}
+
+.bar .clock {
+  background-color: @accent_bg_color;
+  color: @accent_fg_color;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.bar .workspaces button {
+  border-radius: 0;
+  padding: 0 0.5rem;
+}
+
+.bar .workspaces button:first-child {
+  background-color: @accent_bg_color;
+  border-radius: 5px 0 0 5px;
+}
+
+.bar .workspaces button:last-child {
+  background-color: @accent_bg_color;
+  border-radius: 0 5px 5px 0;
+}
+
+.bar .media {
+  margin: 0 1rem;
+  font-size: 0.85rem;
+}
