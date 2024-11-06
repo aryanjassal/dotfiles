@@ -1,4 +1,5 @@
 import type { MprisPlayer } from 'types/service/mpris';
+import { compareArrays } from 'utils';
 
 const mpris = await Service.import('mpris');
 
@@ -226,8 +227,7 @@ const mediaPopup = Widget.Window({
         const mprisBusNames = filterPlayers(mpris.players).map(
           (v) => v.bus_name,
         );
-        if (JSON.stringify(mprisBusNames) == JSON.stringify(trackedBusNames))
-          return;
+        if (compareArrays(mprisBusNames, trackedBusNames)) return;
         // If we need to update the tracked buses
         trackedBusNames = filterPlayers(mpris.players).map((v) => v.bus_name);
         // Delete old children
