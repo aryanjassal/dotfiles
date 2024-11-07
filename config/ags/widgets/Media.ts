@@ -52,7 +52,8 @@ function filterPlayers(players: MprisPlayer[]) {
   return players.filter((p) => isRealPlayer(p));
 }
 
-function Player(player: MprisPlayer) {
+// TODO: convert this to a class for maximum control and flexibility
+function Player(player: MprisPlayer, isPinned = false) {
   const thumbnail = Widget.Box({
     class_name: 'img',
     vpack: 'start',
@@ -131,7 +132,7 @@ function Player(player: MprisPlayer) {
 
   const prev = Widget.Button(
     {
-      class_name: 'media-button media-previous',
+      class_name: 'media-button',
       on_clicked: () => {
         player.previous();
         activePlayer = player;
@@ -143,7 +144,7 @@ function Player(player: MprisPlayer) {
 
   const next = Widget.Button(
     {
-      class_name: 'media-button media-next',
+      class_name: 'media-button',
       on_clicked: () => {
         player.next();
         activePlayer = player;
@@ -158,17 +159,19 @@ function Player(player: MprisPlayer) {
       class_name: 'media-position',
       spacing: 6,
       hpack: 'end',
-      setup: (self) =>
-        self.poll(1000, (self) => {
+      setup: (self) => {
+        function update(self) {
           self.visible = player.length > 0;
-        }),
+        }
+        self.hook(mpris, update, 'player-changed');
+      },
     },
     Widget.Label({
       setup: (self) => {
         function update(_: any) {
           self.label = lengthToDuration(player.position);
         }
-        self.hook(player, update);
+        self.hook(player, update, 'position');
         self.poll(1000, update);
       },
     }),
@@ -179,10 +182,30 @@ function Player(player: MprisPlayer) {
           self.label = lengthToDuration(player.length);
         }
         self.hook(player, update);
-        self.poll(1000, update);
+        player.connect('position', update);
       },
     }),
   );
+
+  const pin = Widget.ToggleButton({
+    class_name: 'media-toggle',
+    child: Widget.Label({
+      class_name: 'material-icons',
+      label: 'keep',
+    }),
+    setup: (self) => {
+      self.active = isPinned;
+      self.toggleClassName('toggle-active', isPinned);
+    },
+    on_toggled: ({ active }) => {
+      pin.toggleClassName('toggle-active', active);
+      activePlayer = player;
+      isPinned = active;
+      pinned = active;
+      updated = true;
+      mpris.emit('player-changed', player.bus_name);
+    },
+  });
 
   return Widget.Box(
     { class_name: 'player' },
@@ -192,7 +215,10 @@ function Player(player: MprisPlayer) {
         vertical: true,
         hexpand: true,
       },
-      Widget.Box([title]),
+      Widget.CenterBox({
+        start_widget: title,
+        end_widget: Widget.Box([pin]),
+      }),
       Widget.Box([artist]),
       Widget.Box({ vexpand: true }),
       Widget.CenterBox({
@@ -212,6 +238,13 @@ function Player(player: MprisPlayer) {
   );
 }
 
+let updated = false;
+let pinned = false;
+
+// TODO: intelligent repopulation - skip deleting and adding existing players.
+// only change new players. this will help optimise this and make flickering
+// even less.
+// TODO: automatically update the active player if an active player is closed
 const mediaPopup = Widget.Window({
   class_name: 'media-popup',
   visible: false,
@@ -227,19 +260,25 @@ const mediaPopup = Widget.Window({
         const mprisBusNames = filterPlayers(mpris.players).map(
           (v) => v.bus_name,
         );
-        if (compareArrays(mprisBusNames, trackedBusNames)) return;
+        if (compareArrays(mprisBusNames, trackedBusNames) && !updated) return;
+        updated = false;
         // If we need to update the tracked buses
         trackedBusNames = filterPlayers(mpris.players).map((v) => v.bus_name);
         // Delete old children
-        self.get_children().forEach((ch) => ch.destroy());
+        self.get_children().forEach((child) => {
+          child.destroy();
+        });
         // Get a list of new children
         const filtered = filterPlayers(mpris.players)
           .sort((v) => (v == activePlayer ? 0 : 1))
-          .sort((v) => (v.metadata['mpris:artUrl'] != null ? 0 : 1))
-          .map((v) => Player(v));
+          .sort((v) => (v.metadata['mpris:artUrl'] != null ? 0 : 1));
         // Append the new children to the object
-        for (const child of filtered) {
-          self.add(child);
+        if (pinned) {
+          self.add(Player(filtered[0], true));
+        } else {
+          for (const child of filtered) {
+            self.add(Player(child));
+          }
         }
       }
       // Update the children whenever a player is changed
