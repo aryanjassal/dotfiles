@@ -33,19 +33,19 @@ window.notification-popups box.notifications {
   border: 1px solid $accent;
   background-color: $background;
   color: $foreground;
-}
 
-.notification.critical {
-  border: 1px solid $red;
-}
+  .title {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
 
-.title {
-  font-size: 1.2em;
-  margin-bottom: 8px;
-}
+  .critical {
+    border: 1px solid $red;
+  }
 
-.body {
-  color: $foreground;
+  .body {
+    color: $foreground;
+  }
 }
 
 .actions {
@@ -93,11 +93,27 @@ window.notification-popups box.notifications {
   }
 
   .title {
-    font-size: 1.2em;
+    min-width: 300px;
+
+    label {
+      font-size: 1.2em;
+    }
   }
 
   .artist {
     color: gray;
+  }
+
+  button {
+    border-radius: 50%;
+    min-width: 2.5em;
+    min-height: 2.5em;
+    padding: 0;
+
+    label {
+      font-size: 1.1em;
+      // color: $accent;
+    }
   }
 
   button:hover,
@@ -106,42 +122,12 @@ window.notification-popups box.notifications {
     color: $accent_fg;
   }
 
-  .toggle-active {
-    background-color: $accent_bg;
+  button.toggle-active {
+    background-color: $accent;
     color: $accent_fg;
   }
 
-  button,
-  .media-position {
-    background-color: $background_unfocus;
-  }
-
-  .media-position {
-    border-radius: 1em;
-    padding: 0 1em;
-  }
-
-  .media-toggle {
-    font-size: 0.8em;   
-  }
-
-  .media-button, .media-toggle {
-    border-radius: 50%;
-    padding: 0;
-    min-width: 2.5em;
-    min-height: 2.5em;
-  }
-
-  .media-button {
-    label {
-      font-size: 1.1em;
-    }
-
-    min-width: 2.5em;
-    min-height: 2.5em;
-  }
-
-  .progressbar {
+  .progress {
     font-size: 3px;
     min-width: 0.4em;
     min-height: 0.4em;
@@ -153,25 +139,25 @@ window.notification-popups box.notifications {
 
 .bar,
 .bar * {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   min-height: 0;
 }
 
 .bar {
   background-color: $background;
 
-  button {
-    background-color: $accent;
-    color: $accent_fg;
+  button,
+  label {
+    background-color: transparent;
   }
 
   button:hover {
     opacity: 0.6;
   }
 
-  .clock {
-    background-color: $accent;
-    color: $accent_fg;
+  .clock,
+  .date {
+    color: $accent;
     padding: 0.5rem;
     border-radius: 5px;
     font-weight: bold;
@@ -179,30 +165,25 @@ window.notification-popups box.notifications {
   }
 
   .workspaces button {
+    color: $accent;
+    font-size: 0.75rem;
     border-radius: 0;
-    padding: 0 0.5rem;
-  }
-
-  .workspaces button:first-child {
-    background-color: $accent;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
-
-  .workspaces button:last-child {
-    background-color: $accent;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    padding: 0 0.3em;
+    background-color: transparent;
   }
 
   .workspaces button.focused {
-    background-color: $red;
+    color: $red;
   }
 
   .media {
     margin: 0 1rem;
     font-size: 0.85rem;
   }
+}
+
+.bar-container {
+  padding: 8px 0;
 }
 
 .material-icons {

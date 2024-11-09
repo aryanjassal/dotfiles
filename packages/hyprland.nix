@@ -198,6 +198,11 @@ in {
         "$mod + SHIFT, k, movewindow, u"
         "$mod + SHIFT, l, movewindow, r"
 
+        "$mod + SHIFT, up, movecurrentworkspacetomonitor, u"
+        "$mod + SHIFT, down, movecurrentworkspacetomonitor, d"
+        "$mod + SHIFT, left, movecurrentworkspacetomonitor, l"
+        "$mod + SHIFT, right, movecurrentworkspacetomonitor, r"
+
         "$alt + SHIFT, J, exec, wpctl set-volume --limit 2.0 @DEFAULT_SINK@ 2%-"
         "$alt + SHIFT, K, exec, wpctl set-volume --limit 2.0 @DEFAULT_SINK@ 2%+"
 
