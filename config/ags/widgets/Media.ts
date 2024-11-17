@@ -1,17 +1,16 @@
 import type { MprisPlayer } from 'types/service/mpris';
 import type { PlaybackStatus } from 'widgets/types';
+import { MediaEventEmitter } from './events';
 import { compareArrays, lengthToDuration } from 'utils';
 
 const mpris = await Service.import('mpris');
+const mediaEvents = new MediaEventEmitter();
 
 let activePlayer: MprisPlayer = getActivePlayer(mpris.players);
 
 const players: Map<string, Player> = new Map();
 
-let updated: string[] = [];
-let pinned = false;
-
-function getActivePlayer(players: MprisPlayer[]) {
+function getActivePlayer(players: MprisPlayer[]): MprisPlayer {
   if (players.length === 1) return players[0];
   players = players.filter((v) => v.play_back_status === 'Playing');
   if (players.length === 1) return players[0];
@@ -259,16 +258,13 @@ const MediaPin = (player: MprisPlayer) => {
       self.on_toggled = ({ active }) => {
         self.toggleClassName('toggle-active', active);
         activePlayer = player;
-        pinned = active;
-        // updated.push(player.bus_name);
-        mpris.emit('player-changed', player.bus_name);
+        if (active) mediaEvents.emit('pinned', player.bus_name);
+        else mediaEvents.emit('unpinned', player.bus_name);
       };
     },
   });
 };
 
-// TODO: fix player pinning
-// TODO: fix pinning wrong players on accident
 // TODO: in the background, add an expanded and blurred image of the album art
 // instead of changing the colors of the player. a darkened and blurred image
 // will look much better than just a simple color change.
@@ -346,7 +342,6 @@ class Player {
 // TODO: intelligent repopulation - skip deleting and adding existing players.
 // only change new players. this will help optimise this and make flickering
 // even less.
-// TODO: automatically update the active player if an active player is closed
 const mediaPopup = Widget.Window({
   class_name: 'media-popup',
   visible: false,
@@ -357,40 +352,79 @@ const mediaPopup = Widget.Window({
     vertical: true,
     spacing: 4,
     setup: (self) => {
-      function update(_: any) {
-        // Check if we even need to update the list
-        const mprisBusNames = filterPlayers(mpris.players).map(
-          (v) => v.bus_name,
-        );
-        const playerBusNames: string[] = []
-        for (const key of players.keys()) playerBusNames.push(key)
-        if (compareArrays(mprisBusNames, playerBusNames) && updated.length === 0) return;
-        // Delete old children
+      function pinnedHandler(busName: string) {
         self.get_children().forEach((child) => {
-          if (child.name != null && updated.includes(child.name)) {
+          if (child.name == null) {
+            // Guard against child names being null. This shouldn't happen.
+            console.warn(`Child ${JSON.stringify(child)} should have a name`);
             child.destroy();
+          } else if (busName != child.name) {
+            // If the active player is being removed, set a new active player.
+            if (activePlayer.bus_name == child.name) {
+              activePlayer = getActivePlayer(mpris.players);
+            }
+            // If the child name is not the object we are pinning, then delete
+            // it. Leave the pinned object alone.
             players.delete(child.name);
+            child.destroy();
+          }
+        });
+      }
+
+      function unpinnedHandler(busName: string) {
+        const mprisPlayers = filterPlayers(mpris.players);
+        for (const mprisPlayer of mprisPlayers) {
+          if (mprisPlayer.bus_name != busName) {
+            // If the child is not the previously pinned object, then leave it
+            // alone. We will only be adding other players after it.
+            self.add(new Player(mprisPlayer).generate());
+          }
+        }
+      }
+
+      function updateHandler() {
+        // Clear all players
+        self.get_children().forEach((child) => {
+          if (child.name == null) {
+            // Guard against child names being null. This shouldn't happen.
+            console.warn(`Child ${JSON.stringify(child)} should have a name`);
+            child.destroy();
+          } else {
+            players.delete(child.name);
+            child.destroy();
           }
         });
         // Get a list of new children
-        const filtered = filterPlayers(mpris.players)
-          .sort((v) => (v == activePlayer ? 0 : 1))
-          .sort((v) => (v.metadata['mpris:artUrl'] != null ? 0 : 1));
-        // Append the new children to the object
-        if (pinned) {
-          // const mplayer = new Player(filtered[0]);
-          // self.add(mplayer.generate());
-        } else {
-          for (const child of filtered) {
-            if (updated.includes(child.bus_name)) continue;
-            const mplayer = new Player(child);
-            self.add(mplayer.generate());
-          }
+        const mprisPlayers = filterPlayers(mpris.players)
+          .sort((v) => (v.metadata['mpris:artUrl'] != null ? 0 : 1))
+          .sort((v) => (v.bus_name == activePlayer?.bus_name ? 0 : 1));
+        // Re-create the children
+        for (const mprisPlayer of mprisPlayers) {
+          self.add(new Player(mprisPlayer).generate());
         }
-        updated = []
       }
+
+      // Remove all players except the pinned one
+      mediaEvents.connect('pinned', pinnedHandler);
+      // Create players for all active players except the unpinned one
+      mediaEvents.connect('unpinned', unpinnedHandler);
+      // Update all the players. This just recreates the entire players list.
+      mediaEvents.connect('update', updateHandler);
+
+      // Reduce the number of updates by checking for changes. Mpris fires it's
+      // 'player_changed' event multiple times per change, so this is needed.
+      function fenceUpdate() {
+        // Get current bus names and tracked bus names
+        const allBusNames = filterPlayers(mpris.players).map((v) => v.bus_name);
+        const playerBusNames = [...players.keys()];
+        // If they are the same, then return
+        if (compareArrays(allBusNames, playerBusNames)) return;
+        // Otherwise, we can update the players
+        updateHandler();
+      }
+
       // Update the children whenever a player is changed
-      self.hook(mpris, update, 'player_changed');
+      self.hook(mpris, fenceUpdate, 'player_changed');
     },
   }),
 });

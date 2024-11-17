@@ -22,6 +22,7 @@
     deno
     bun
     nodemon
+    eslint_d
 
     # Nvim stuff
     stylua

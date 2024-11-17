@@ -62,7 +62,7 @@ export default (monitor = 0) =>
     exclusivity: 'exclusive',
     child: Widget.CenterBox({
       class_name: 'bar-container',
-      start_widget: Widget.Box([MediaPlayer()]),
+      start_widget: Widget.Box([MediaPlayer()]), // disabled cuz its kinda memory leaking
       center_widget: Widget.CenterBox({
         center_widget: Widget.Box([workspaces]),
       }),

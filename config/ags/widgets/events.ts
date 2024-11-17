@@ -3,8 +3,9 @@ type MediaEventListener = (...args: any[]) => void
 
 // 'update' - General update to the list
 // 'pinned' - A handler just got pinned
-type MediaEventSignal = 'update' | 'pinned';
+type MediaEventSignal = 'update' | 'pinned' | 'unpinned';
 
+// TEST: does this cause memory leaks for long-running sessions?
 class MediaEventEmitter {
   private events: Record<string, Array<MediaEventListener>> = {};
 

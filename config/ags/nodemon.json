@@ -1,6 +1,6 @@
 {
   "watch": [
-    "./config/ags/**/*"
+    "**/*"
   ],
   "ext": "ts,js,json,css",
   "exec": "ags -c ~/.config/home-manager/config/ags/config.js"
