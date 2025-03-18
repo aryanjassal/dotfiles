@@ -3,7 +3,7 @@
 {
   xdg.desktopEntries = {
     btop = {
-      name = "Terminal Monitor";
+      name = "btop";
       genericName = "System Monitor";
       comment = "A powerful yet minimalistic TUI resource monitor";
       icon = "org.gnome.Console";
