@@ -1,4 +1,4 @@
-{ pkgs, cursor, ... }:
+{ cursor, ... }:
 
 let
   hyprsettings = {
@@ -8,23 +8,11 @@ let
     };
     rounding = "12";
   };
-
-  hyprlandPackage = pkgs.hyprland.overrideAttrs(self: {
-    version = "0.41.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "hyprwm";
-      repo = "hyprland";
-      fetchSubmodules = true;
-      rev = "refs/tags/v0.41.0";
-      hash = "sha256-iX/l3UT8iXu8psu2UirFX11Yg2zYwpgzoXB32oM3N3U=";
-    };
-  });
 in {
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     xwayland.enable = true;
-    package = hyprlandPackage;
 
     settings = {
       exec-once =

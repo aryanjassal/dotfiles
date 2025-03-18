@@ -20,6 +20,7 @@
     initExtra = ''
       setopt NO_BEEP
       EDITOR=nvim
+      VISUAL=neovide
       PATH=$PATH:~/.cargo/bin:~/.bin:~/.npm-globals/node_modules/.bin
     '';
 
@@ -33,6 +34,8 @@
       ndev = "nix develop --command zsh";
       rebuild = "home-manager switch --flake ~/.config/home-manager";
       record = "ZDOTDIR=~/.zsh-rec zsh";
+      ed = "$EDITOR";
+      edit = "$VISUAL &";
     };
   };
 }

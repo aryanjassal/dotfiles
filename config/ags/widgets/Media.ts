@@ -6,11 +6,12 @@ import { compareArrays, lengthToDuration } from 'utils';
 const mpris = await Service.import('mpris');
 const mediaEvents = new MediaEventEmitter();
 
-let activePlayer: MprisPlayer = getActivePlayer(mpris.players);
+let activePlayer: MprisPlayer | undefined = getActivePlayer(mpris.players);
 
 const players: Map<string, Player> = new Map();
 
-function getActivePlayer(players: MprisPlayer[]): MprisPlayer {
+function getActivePlayer(players: MprisPlayer[]): MprisPlayer | undefined {
+  if (players.length === 0) return undefined;
   if (players.length === 1) return players[0];
   players = players.filter((v) => v.play_back_status === 'Playing');
   if (players.length === 1) return players[0];
@@ -18,19 +19,22 @@ function getActivePlayer(players: MprisPlayer[]): MprisPlayer {
   return players[0];
 }
 
-/**
- * Check if the current player is a real player which can play music.
- */
-function isRealPlayer(player: MprisPlayer): boolean {
-  return (
-    // playerctld just copies other buses and we don't need duplicates
-    !player.bus_name.startsWith('org.mpris.MediaPlayer2.playerctld') &&
-    // Non-instance mpd bus
-    !player.bus_name.endsWith('.mpd') &&
-    // Make sure we can actually play from the source
-    player.can_play
-  );
-}
+// /**
+//  * Check if the current player is a real player which can play music.
+//  */
+// function isRealPlayer(player: MprisPlayer): boolean {
+//   console.log(player)
+//   return (
+//     // playerctld just copies other buses and we don't need duplicates
+//     !player.bus_name.startsWith('org.mpris.MediaPlayer2.playerctld') &&
+//     // Non-instance mpd bus
+//     !player.bus_name.endsWith('.mpd') &&
+//     // Make sure we can actually play from the source
+//     player.can_play &&
+//     // Spotify sets the position to -1 when closing, so check for that too
+//     player.position >= 0
+//   );
+// }
 
 /**
  * Takes in a list of MprisPlayers and filters out all invalid players.
@@ -38,7 +42,10 @@ function isRealPlayer(player: MprisPlayer): boolean {
  * @returns Filtered for real players
  */
 function filterPlayers(players: MprisPlayer[]) {
-  return players.filter((p) => isRealPlayer(p));
+  const convertedPlayers = players.map((player) => new Player(player))
+  const filteredPlayers = convertedPlayers.filter((player) => player.isReal()).map((player) => player.player);
+  convertedPlayers.forEach((player) => player.destroy())
+  return filteredPlayers;
 }
 
 /**
@@ -265,6 +272,7 @@ const MediaPin = (player: MprisPlayer) => {
   });
 };
 
+// TODO: update position with hook and poll
 // TODO: in the background, add an expanded and blurred image of the album art
 // instead of changing the colors of the player. a darkened and blurred image
 // will look much better than just a simple color change.
@@ -277,6 +285,10 @@ class Player {
     players.set(player.bus_name, this);
   }
 
+  public destroy() {
+    players.delete(this.player.bus_name);
+  }
+
   public isReal(): boolean {
     return (
       // playerctld just copies other buses and we don't need duplicates
@@ -284,7 +296,9 @@ class Player {
       // Non-instance mpd bus
       !this.player.bus_name.endsWith('.mpd') &&
       // Make sure we can actually play from the source
-      this.player.can_play
+      this.player.can_play &&
+      // Spotify sets the position to -1 when closing, so check for that too
+      this.player.position >= 0
     );
   }
 
@@ -339,9 +353,6 @@ class Player {
   }
 }
 
-// TODO: intelligent repopulation - skip deleting and adding existing players.
-// only change new players. this will help optimise this and make flickering
-// even less.
 const mediaPopup = Widget.Window({
   class_name: 'media-popup',
   visible: false,
@@ -360,7 +371,7 @@ const mediaPopup = Widget.Window({
             child.destroy();
           } else if (busName != child.name) {
             // If the active player is being removed, set a new active player.
-            if (activePlayer.bus_name == child.name) {
+            if (activePlayer?.bus_name == child.name) {
               activePlayer = getActivePlayer(mpris.players);
             }
             // If the child name is not the object we are pinning, then delete
@@ -398,6 +409,7 @@ const mediaPopup = Widget.Window({
         const mprisPlayers = filterPlayers(mpris.players)
           .sort((v) => (v.metadata['mpris:artUrl'] != null ? 0 : 1))
           .sort((v) => (v.bus_name == activePlayer?.bus_name ? 0 : 1));
+        console.log(mprisPlayers)
         // Re-create the children
         for (const mprisPlayer of mprisPlayers) {
           self.add(new Player(mprisPlayer).generate());
@@ -437,8 +449,9 @@ const mediaButton = Widget.Button({
   }).hook(
     mpris,
     (self) => {
-      if (mpris.players.length > 0) {
-        const { track_title } = activePlayer ?? filterPlayers(mpris.players)[0];
+      const filteredPlayers = filterPlayers(mpris.players);
+      if (filteredPlayers.length > 0) {
+        const { track_title } = activePlayer ?? filteredPlayers[0];
         const title = track_title.length ? track_title : 'Title';
         self.label = title;
       } else {

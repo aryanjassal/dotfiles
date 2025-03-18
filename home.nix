@@ -45,8 +45,8 @@ in rec {
       inputs.ags.homeManagerModules.default
       inputs.polykey-cli.homeModules.default
     ];
-  in modules ++ map
-  (configPath: import configPath { inherit inputs system pkgs cursor icons font theme; })
+  in modules ++ map (configPath:
+    import configPath { inherit inputs system pkgs cursor icons font theme; })
   paths;
 
   home = {
@@ -64,10 +64,26 @@ in rec {
 
     # Cursor theming
     pointerCursor = cursor // { gtk.enable = true; };
-
   };
 
   xdg.systemDirs.data = [ "${home.homeDirectory}/.local/share" ];
+
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-gtk
+      fcitx5-mozc
+      fcitx5-nord
+    ];
+  };
+
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals =
+  #     [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-wlr ];
+  #   config.common.default = "*";
+  #   xdgOpenUsePortal = true;
+  # };
 
   # GTK stuff.
   # For theming GTK apps, look into Chroma
@@ -75,6 +91,11 @@ in rec {
     enable = true;
     cursorTheme = cursor;
     theme.name = "adw-gtk3-dark"; # Needed by Brave for some reason
+  };
+
+  qt = {
+    enable = true;
+    style.name = "adwaita-dark";
   };
 
   systemd.user.sessionVariables = home.sessionVariables;

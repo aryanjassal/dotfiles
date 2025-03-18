@@ -23,6 +23,12 @@
     bun
     nodemon
     eslint_d
+    cloudflared
+    openssl
+    prisma
+    sqlite
+    typescript
+    gnumake
 
     # Nvim stuff
     stylua
@@ -41,7 +47,6 @@
     peaclock
     pfetch
     nodejs
-    cava
     glow
     yazi
     asciinema
@@ -49,12 +54,15 @@
     termsvg
     imagemagick
     scrcpy
+    samba
     inputs.chroma.packages.${system}.default
 
     # Apps
+    thunderbird
     bitwarden
     teams-for-linux
     libreoffice
+    postman
     pavucontrol
     obs-studio
     spotify
@@ -63,25 +71,34 @@
     vesktop
     gthumb
     mpv
-    foot
     jetbrains.webstorm
+    vscode
+    konsole
+    anki-bin
 
-    # Hyprland
-    swaylock-effects # TODO: switch to hyprlock
-    rofi-wayland
-    hyprlock
-    hypridle
+    # # Hyprland
+    # swaylock-effects # TODO: switch to hyprlock
+    # rofi-wayland
+    # hyprlock
+    # hypridle
     kitty
-    swww
+    # swww
+
+    # Gnome
+    gnome-tweaks
+    gnomeExtensions.unite
+    albert
 
     # System Tools
-    xdg-desktop-portal-hyprland
     wl-clip-persist
+    qgnomeplatform
     brightnessctl
     wl-clipboard
     libnotify
     gradience
     playerctl
+    kdePackages.breeze
+    adwaita-qt
     adw-gtk3
     starship
     ripgrep
@@ -100,8 +117,14 @@
     fzf
 
     # Fonts
-    nerdfonts
     material-symbols
     google-fonts
+    # nerdfonts
+    nerd-fonts.fira-code
+    nerd-fonts.ubuntu
+    nerd-fonts.hack
+    nerd-fonts.caskaydia-cove
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.space-mono
   ];
 }
