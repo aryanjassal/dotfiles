@@ -85,6 +85,7 @@
     # Gnome
     gnome-tweaks
     gnomeExtensions.unite
+    gnomeExtensions.kimpanel
     albert
 
     # System Tools

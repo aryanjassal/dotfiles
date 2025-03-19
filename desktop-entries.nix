@@ -27,7 +27,7 @@
       comment = "#adfreeforlife";
       icon = "brave-browser";
       exec =
-        "brave --enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform --ozone-platform=wayland %U";
+        "brave --enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime %U";
       terminal = false;
       categories = [ "Network" "WebBrowser" ];
       mimeType = [
@@ -55,6 +55,18 @@
           name = "New Private Window";
           exec = "brave --incognito";
         };
+      };
+    };
+    vesktop = {
+      name = "Vesktop";
+      genericName = "Internet Messenger";
+      comment = "Almost there but not quite";
+      icon = "Vesktop";
+      exec = "vesktop --wayland-text-input-version=3 --enable-wayland-ime %U";
+      settings = { 
+        Keywords = "discord;vencord;electron;chat";
+        StartupWMClass = "Vesktop";
+        Version = "1.4";
       };
     };
   };

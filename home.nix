@@ -57,6 +57,14 @@ in rec {
       NIXOS_OZONE_WL = "1";
       XCURSOR_THEME = cursor.name;
       XCURSOR_SIZE = cursor.size;
+
+      # Fcitx-specific stuff
+      XMODIFIERS = "@im=fcitx";
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
+      SDL_IM_MODULE = "fcitx";
+      GLFW_IM_MODULE = "ibus";
+      INPUT_METHOD = "fcitx";
     };
 
     # Cursor theming
