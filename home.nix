@@ -41,10 +41,7 @@ let
 in rec {
   imports = let
     paths = [ ./packages.nix ./desktop-entries.nix ];
-    modules = [
-      inputs.ags.homeManagerModules.default
-      inputs.polykey-cli.homeModules.default
-    ];
+    modules = [ inputs.polykey-cli.homeModules.default ];
   in modules ++ map (configPath:
     import configPath { inherit inputs system pkgs cursor icons font theme; })
   paths;
@@ -70,27 +67,15 @@ in rec {
 
   i18n.inputMethod = {
     enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-gtk
-      fcitx5-mozc
-      fcitx5-nord
-    ];
+    fcitx5.addons = with pkgs; [ fcitx5-gtk fcitx5-mozc fcitx5-nord ];
   };
-
-  # xdg.portal = {
-  #   enable = true;
-  #   extraPortals =
-  #     [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-wlr ];
-  #   config.common.default = "*";
-  #   xdgOpenUsePortal = true;
-  # };
 
   # GTK stuff.
   # For theming GTK apps, look into Chroma
   gtk = {
     enable = true;
     cursorTheme = cursor;
-    theme.name = "adw-gtk3-dark"; # Needed by Brave for some reason
+    theme.name = "adw-gtk3-dark";
   };
 
   qt = {

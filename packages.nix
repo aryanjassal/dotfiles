@@ -8,7 +8,6 @@
     paths = map (name: "${./packages}/${name}") matches;
   in map (file: import file { inherit pkgs cursor icons font theme; }) paths;
 
-
   home.packages = with pkgs; [
     # Development
     python3
@@ -67,13 +66,12 @@
     obs-studio
     spotify
     brave
-    firefox
     vesktop
     gthumb
     mpv
     jetbrains.webstorm
     vscode
-    konsole
+    kdePackages.konsole
     anki-bin
 
     # # Hyprland
